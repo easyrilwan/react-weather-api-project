@@ -1,23 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import TodayDisplay from "./components/TodayDisplay";
+import Card from "./components/Card";
+import UnitContainer from "./components/UnitContainer";
 
-function App() {
+const App = () => {
+  const [location, setLocation] = useState(null)
+  const [error, setError] = useState(null)
+  const [data, setData] = useState(null)
+  const [unit, setUnit] = useState("celcius")
+
+  const getLocation = () => {
+    if (!navigator.geolocation) {
+      setError("Your browser does not support the location API")
+    } else {
+      navigator.geolocation.getCurrentPosition(position => {
+        setLocation(position.coords)
+      },
+        () => {
+          setError("Sorry, we can't find your location")
+        }
+      )
+
+      console.log(location);
+    }
+  }
+
+  const fetchData = () => {
+    const latitude = location?.latitude
+    const longitude = location?.longitude
+    fetch(`http://www.7timer.info/bin/api.pl?lon=${longitude}&lat=${latitude}&product=civillight&output=json`)
+      .then(response => response.json())
+      .then(json => setData(json))
+      .catch(err => console.error(err))
+  }
+
+  useEffect(() => {
+    getLocation()
+    fetchData()
+  }, [])
+
+  const handleClick = (e) => {
+    setUnit(e.target.id)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="weather-app">
+      <TodayDisplay today={data?.dataseries[0]} location={location} />
+      <div className="cards-container">
+        {data?.dataseries.map((day, index) => (
+          <Card key={index} day={day} index={index} unit={unit} />
+        ))}
+      </div>
+      <UnitContainer handleClick={handleClick} />
+      {error}
     </div>
   );
 }
