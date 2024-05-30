@@ -20,15 +20,15 @@ const App = () => {
           setError("Sorry, we can't find your location")
         }
       )
-
-      console.log(location);
     }
   }
 
   const fetchData = () => {
     const latitude = location?.latitude
     const longitude = location?.longitude
-    fetch(`http://www.7timer.info/bin/api.pl?lon=${longitude}&lat=${latitude}&product=civillight&output=json`)
+    fetch(
+      `http://www.7timer.info/bin/api.pl?lon=${longitude}&lat=${latitude}&product=civillight&output=json`
+    )
       .then(response => response.json())
       .then(json => setData(json))
       .catch(err => console.error(err))
@@ -51,7 +51,7 @@ const App = () => {
           <Card key={index} day={day} index={index} unit={unit} />
         ))}
       </div>
-      <UnitContainer handleClick={handleClick} />
+      <UnitContainer handleClick={handleClick} unit={unit} />
       {error}
     </div>
   );
