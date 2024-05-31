@@ -4,9 +4,13 @@ import Card from "./components/Card";
 import UnitContainer from "./components/UnitContainer";
 
 const App = () => {
+
   const [location, setLocation] = useState(null)
+
   const [error, setError] = useState(null)
+
   const [data, setData] = useState(null)
+
   const [unit, setUnit] = useState("celcius")
 
   const getLocation = () => {
@@ -44,10 +48,15 @@ const App = () => {
   }
 
   return (
+
     <div className="weather-app">
+
       <TodayDisplay today={data?.dataseries[0]} location={location} />
+
       <div className="cards-container">
+
         {data?.dataseries.map((day, index) => (
+          
           <Card key={index} day={day} index={index} unit={unit} />
         ))}
       </div>

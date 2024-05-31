@@ -2,6 +2,7 @@ const getIcon = (weatherType) => {
   let weatherStyle
 
   switch (weatherType) {
+
     case "lightrainday":
       weatherStyle = <i className="fas fa-cloud-rain"></i>
       break;
@@ -63,6 +64,7 @@ const convertUnit = (unit, currentTemp) => {
       break;
   }
   return temp
+  
 }
 
 
